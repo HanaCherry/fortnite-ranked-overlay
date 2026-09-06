@@ -117,7 +117,10 @@ async function launchAnyBrowser() {
 }
 
 async function ensurePage() {
-  if (!chromium) throw new Error("playwright-core missing");
+  if (!chromium) {
+    try { chromium = require("playwright-core").chromium; }
+    catch { throw new Error("Module de suivi absent. Relancez LANCER.bat pour installer les composants, ou executez npm install puis redemarrez le serveur."); }
+  }
   if (page && browser) return page;
   if (launching) {
     await launching;

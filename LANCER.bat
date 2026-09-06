@@ -10,6 +10,12 @@ if errorlevel 1 (
 )
 
 echo.
+call "%~dp0INSTALLER.bat"
+if errorlevel 1 (
+  echo Installation impossible. Verifiez votre connexion Internet puis relancez.
+  pause
+  exit /b 1
+)
 echo  Demarrage Fortnite Ranked...
 echo  Controle    : http://127.0.0.1:8767/control.html
 echo  Overlay OBS : http://127.0.0.1:8767/overlay.html

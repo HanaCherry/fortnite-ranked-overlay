@@ -11,7 +11,7 @@ const sourceFiles = [
   '.gitignore', '.npmignore', 'LICENSE', 'README.md', 'README.en.md',
   'package.json', 'package-lock.json',
   'config.json', 'server.js', 'tracker-live.js',
-  'LANCER.bat', 'LANCER-SILENCIEUX.vbs',
+  'LANCER.bat', 'LANCER-SILENCIEUX.vbs', 'INSTALLER.bat',
   'index.html', 'simulateur.html', '404.html',
   'tools/export-github.js', 'tools/capture-docs.js', 'tools/build-i18n-readme.js', 'test/app.test.js',
   'docs/i18n.js', 'docs/site.js',

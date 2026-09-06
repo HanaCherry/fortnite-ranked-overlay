@@ -1,6 +1,6 @@
 {
   "name": "fortnite-ranked-overlay",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Overlay Fortnite Ranked pour OBS — GalaxyBunny Studio",
   "main": "server.js",
   "private": true,
@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=18"
   },
-  "optionalDependencies": {
+  "dependencies": {
     "playwright-core": "1.61.1"
   }
 }

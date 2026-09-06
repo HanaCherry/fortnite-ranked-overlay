@@ -122,7 +122,7 @@ Taille conseillée : **700 × 220** (bannière) · **1100 × 220** (vue complèt
 
 ## Synchronisation
 
-La lecture du profil public utilise `playwright-core` et un navigateur Edge ou Chrome installé. Cette dépendance est optionnelle : les fonctions manuelles restent disponibles sans elle. Les restrictions du site, les profils privés et les changements de format peuvent empêcher la synchronisation. Les données ne sont pas garanties en temps réel. L’intervalle par défaut est de 30 secondes.
+La lecture du profil public utilise `playwright-core` et un navigateur Edge ou Chrome installé. Ce composant est installé automatiquement par les lanceurs Windows si nécessaire, ou par `npm install`. Une connexion Internet est nécessaire lors de la première installation. Les restrictions du site, les profils privés et les changements de format peuvent empêcher la synchronisation. Les données ne sont pas garanties en temps réel. L’intervalle par défaut est de 30 secondes.
 
 ## Données locales
 

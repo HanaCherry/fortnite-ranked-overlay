@@ -93,7 +93,7 @@ Suggested size: **700 × 220** (banner) · **1100 × 220** (full).
 
 ## Sync
 
-Public-profile readout uses `playwright-core` and an installed Edge or Chrome browser. This dependency is optional: manual features work without it. Site restrictions, private profiles, and layout changes can block sync. Data is not guaranteed real-time. Default interval is 30 seconds.
+Public-profile readout uses `playwright-core` and an installed Edge or Chrome browser. The Windows launchers install this required component automatically when missing; you can also run `npm install`. An Internet connection is required for the first installation. Site restrictions, private profiles, and layout changes can block sync. Data is not guaranteed real-time. Default interval is 30 seconds.
 
 ## Local data
 
