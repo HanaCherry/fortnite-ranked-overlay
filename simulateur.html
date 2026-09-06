@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulateur Ranked Fortnite · GalaxyBunny Studio</title>
+  <meta name="description" content="Estimez vos points ranked Fortnite selon le placement, les éliminations et le niveau des adversaires.">
+  <meta name="theme-color" content="#070513">
+  <link rel="icon" href="public/brand/studio-logo.png">
+  <link rel="canonical" href="https://hanacherry.github.io/fortnite-ranked-overlay/simulateur.html">
+  <style>
+    :root {
+      --bg: #070513; --card: rgba(16,17,34,.86); --line: rgba(213,201,255,.14);
+      --text: #f4f6fb; --muted: #aab1c4; --pink: #c9bcff; --accent: #8670ef;
+      --font: Inter, "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: var(--font); color: var(--text);
+      background:
+        radial-gradient(ellipse at 12% 0%, #38207988, transparent 55%),
+        radial-gradient(ellipse at 90% 80%, #152f7088, transparent 50%), #070513;
+    }
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 16px 22px; border-bottom: 1px solid var(--line);
+      background: rgba(7,5,19,.55); backdrop-filter: blur(16px); position: sticky; top: 0;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .brand img { width: 40px; height: 40px; }
+    .brand strong { display: block; font-size: 14px; }
+    .brand small { color: var(--muted); font-size: 12px; }
+    nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    nav a, .btn {
+      color: var(--text); text-decoration: none; font-size: 14px;
+      padding: 8px 12px; border-radius: 10px;
+    }
+    nav a:hover { background: #9980ff22; }
+    select#lang, input, select, button {
+      font: inherit; color: var(--text); background: #090b16;
+      border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    }
+    .btn, button[type="submit"] {
+      background: #8670ef; border: 1px solid #a897ff50; font-weight: 700; cursor: pointer;
+    }
+    button.ghost { background: #ffffff09; }
+    .wrap { width: min(760px, calc(100% - 28px)); margin: 28px auto 60px; }
+    h1 { font-size: 32px; letter-spacing: -.8px; margin: 0 0 8px; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    .badge {
+      display: inline-block; padding: 8px 12px; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--pink); background: #8971ec18; font-size: 13px; margin-bottom: 22px;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px;
+    }
+    label { display: block; font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+    .field { margin-bottom: 16px; }
+    .row { display: flex; gap: 10px; align-items: center; }
+    .row input, .row select { flex: 1; }
+    .val {
+      min-width: 54px; text-align: center; padding: 10px; border-radius: 10px;
+      border: 1px solid var(--line); color: #83eab3; background: #08301c55;
+    }
+    .actions { display: flex; gap: 10px; margin-top: 8px; }
+    .actions button { flex: 1; }
+    .result { display: none; margin-top: 18px; text-align: center; padding: 18px; border-radius: 14px; border: 1px solid var(--line); background: #090b16; }
+    .result.on { display: block; }
+    .result b { font-size: 42px; display: block; margin: 6px 0 10px; }
+    .pos { color: #83eab3; } .neg { color: #ff8ca5; } .neu { color: #f0c14b; }
+    .break { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; text-align: left; }
+    .break div { background: #ffffff07; border-radius: 10px; padding: 10px; font-size: 13px; }
+    .break span { display: block; color: var(--muted); font-size: 12px; }
+    .info { margin-top: 18px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .ranks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+    .ranks i { display: block; text-align: center; padding: 8px; border-radius: 8px; font-style: normal; font-size: 12px; font-weight: 700; }
+    .alert { color: #ff8ca5; font-size: 13px; min-height: 18px; margin: 4px 0 8px; }
+    @media (max-width: 700px) {
+      .break, .ranks, .actions { grid-template-columns: 1fr; display: grid; }
+      nav a:not(.btn) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">
+      <img src="public/brand/studio-logo.png" alt="GalaxyBunny Studio" width="40" height="40">
+      <span><strong>GalaxyBunny</strong><small>Studio</small></span>
+    </a>
+    <nav>
+      <a href="index.html" data-i18n="navHome">Accueil</a>
+      <a href="simulateur.html" data-i18n="navSimulator">Simulateur</a>
+      <a href="https://github.com/HanaCherry/fortnite-ranked-overlay" data-i18n="navGithub">GitHub</a>
+      <select id="lang" aria-label="Language"></select>
+    </nav>
+  </header>
+  <main class="wrap">
+    <h1 data-i18n="sTitle">Simulateur Ranked Fortnite</h1>
+    <p class="sub" data-i18n="sSub"></p>
+    <div class="badge" data-i18n="sSeason"></div>
+    <form class="card" id="form">
+      <div class="field">
+        <label for="rank" data-i18n="sRank"></label>
+        <select id="rank" required>
+          <option value="" data-i18n="sPickRank"></option>
+          <optgroup id="gNormal" label="Rangs classiques"></optgroup>
+          <optgroup id="gElite" label="Rangs élite"></optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label for="placement" data-i18n="sPlace"></label>
+        <div class="row"><input id="placement" type="number" min="1" max="100" required><div class="val" id="placementVal">-</div></div>
+      </div>
+      <div class="field">
+        <label for="eliminations" data-i18n="sElim"></label>
+        <div class="row"><input id="eliminations" type="number" min="0" max="30" required><div class="val" id="elimVal">-</div></div>
+      </div>
+      <div class="field">
+        <label for="late" data-i18n="sLate"></label>
+        <div class="row"><input id="late" type="number" min="0" max="15" required><div class="val" id="lateVal">-</div></div>
+      </div>
+      <div class="field">
+        <label for="opp" data-i18n="sOpp"></label>
+        <select id="opp" required>
+          <option value="" data-i18n="sPickRank"></option>
+          <option value="low" data-i18n="sOppL"></option>
+          <option value="medium" data-i18n="sOppM"></option>
+          <option value="high" data-i18n="sOppH"></option>
+        </select>
+      </div>
+      <div class="alert" id="alert" role="status"></div>
+      <div class="actions">
+        <button type="submit" data-i18n="sCalc"></button>
+        <button type="reset" class="ghost" data-i18n="sReset"></button>
+      </div>
+      <div class="result" id="result">
+        <div data-i18n="sResult"></div>
+        <b id="score">+0%</b>
+        <div id="detail" style="color:var(--muted);font-size:14px"></div>
+        <div class="break" id="break"></div>
+      </div>
+    </form>
+    <div class="info">
+      <strong data-i18n="sSystemT"></strong>
+      <p data-i18n="sSystemD"></p>
+      <strong data-i18n="sGuide"></strong>
+      <div class="ranks">
+        <i style="background:#8b6f47">Bronze</i>
+        <i style="background:#c0c0c0;color:#111">Silver</i>
+        <i style="background:#ffc800;color:#111">Gold</i>
+        <i style="background:#00d4ff;color:#111">Platinum</i>
+        <i style="background:#6dd5ed;color:#111">Diamond</i>
+        <i style="background:#b388ff">Elite</i>
+        <i style="background:#ff6b9d">Champion</i>
+        <i style="background:#ff1493">Unreal</i>
+        <i style="background:linear-gradient(135deg,#ff1493,#ffa500)">Unreal Legends</i>
+      </div>
+    </div>
+  </main>
+  <script src="docs/i18n.js"></script>
+  <script src="docs/site.js"></script>
+  <script>
+    const ranks = {
+      bronze1: { label: "Bronze I", multiplier: 0.8, severity: 0.9 },
+      bronze2: { label: "Bronze II", multiplier: 0.85, severity: 0.9 },
+      bronze3: { label: "Bronze III", multiplier: 0.9, severity: 0.9 },
+      silver1: { label: "Silver I", multiplier: 1.0, severity: 1.0 },
+      silver2: { label: "Silver II", multiplier: 1.05, severity: 1.0 },
+      silver3: { label: "Silver III", multiplier: 1.1, severity: 1.0 },
+      gold1: { label: "Gold I", multiplier: 1.15, severity: 1.1 },
+      gold2: { label: "Gold II", multiplier: 1.2, severity: 1.1 },
+      gold3: { label: "Gold III", multiplier: 1.25, severity: 1.1 },
+      platinum1: { label: "Platinum I", multiplier: 1.3, severity: 1.2 },
+      platinum2: { label: "Platinum II", multiplier: 1.35, severity: 1.2 },
+      platinum3: { label: "Platinum III", multiplier: 1.4, severity: 1.2 },
+      diamond1: { label: "Diamond I", multiplier: 1.5, severity: 1.3 },
+      diamond2: { label: "Diamond II", multiplier: 1.55, severity: 1.3 },
+      diamond3: { label: "Diamond III", multiplier: 1.6, severity: 1.3 },
+      elite3: { label: "Elite III", multiplier: 1.7, severity: 1.4 },
+      elite2: { label: "Elite II", multiplier: 1.75, severity: 1.45 },
+      elite1: { label: "Elite I", multiplier: 1.8, severity: 1.5 },
+      champion3: { label: "Champion III", multiplier: 1.9, severity: 1.6 },
+      champion2: { label: "Champion II", multiplier: 1.95, severity: 1.65 },
+      champion1: { label: "Champion I", multiplier: 2.0, severity: 1.7 },
+      unreal: { label: "Unreal", multiplier: 2.3, severity: 1.9 },
+      unreallegends: { label: "Unreal Legends", multiplier: 2.5, severity: 2.0 }
+    };
+    const classic = ["bronze3","bronze2","bronze1","silver3","silver2","silver1","gold3","gold2","gold1","platinum3","platinum2","platinum1","diamond3","diamond2","diamond1"];
+    const elite = ["elite3","elite2","elite1","champion3","champion2","champion1","unreal","unreallegends"];
+    function fillRanks() {
+      const g1 = document.getElementById("gNormal");
+      const g2 = document.getElementById("gElite");
+      g1.innerHTML = ""; g2.innerHTML = "";
+      classic.forEach((id) => { const o = document.createElement("option"); o.value = id; o.textContent = ranks[id].label; g1.appendChild(o); });
+      elite.forEach((id) => { const o = document.createElement("option"); o.value = id; o.textContent = ranks[id].label; g2.appendChild(o); });
+    }
+    fillRanks();
+    function lang() { return document.documentElement.lang || "fr"; }
+    function t(key) { return window.SITE.t(lang(), key); }
+    function bindVal(input, out) { input.addEventListener("input", () => { out.textContent = input.value || "-"; }); }
+    bindVal(document.getElementById("placement"), document.getElementById("placementVal"));
+    bindVal(document.getElementById("eliminations"), document.getElementById("elimVal"));
+    bindVal(document.getElementById("late"), document.getElementById("lateVal"));
+
+    function calc(rank, placement, elims, late, opp) {
+      const cfg = ranks[rank];
+      let placementBonus = placement <= 5 ? 3.5 : placement <= 10 ? 2.5 : placement <= 25 ? 0.5 : placement <= 50 ? -1.5 : -4;
+      placementBonus *= cfg.severity;
+      const elimBonus = elims * 0.8;
+      const lateBonus = late * 3;
+      const oppMul = opp === "low" ? 0.8 : opp === "high" ? 1.5 : 1.2;
+      const elimPart = (elimBonus + lateBonus) * oppMul;
+      const finalPoints = Math.round((placementBonus + elimPart) * cfg.multiplier * 10) / 10;
+      return {
+        placementBonus: Math.round(placementBonus * 10) / 10,
+        elimBonus: Math.round(elimBonus * 10) / 10,
+        lateBonus: Math.round(lateBonus * 10) / 10,
+        oppMul, rankMul: cfg.multiplier, finalPoints, label: cfg.label
+      };
+    }
+
+    document.getElementById("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const alertBox = document.getElementById("alert");
+      alertBox.textContent = "";
+      const rank = document.getElementById("rank").value;
+      const placement = Number(document.getElementById("placement").value);
+      const elims = Number(document.getElementById("eliminations").value);
+      const late = Number(document.getElementById("late").value);
+      const opp = document.getElementById("opp").value;
+      if (!rank || !placement || Number.isNaN(elims) || Number.isNaN(late) || !opp) {
+        alertBox.textContent = t("sNeedAll");
+        return;
+      }
+      if (late > elims) {
+        alertBox.textContent = t("sLateErr");
+        return;
+      }
+      const r = calc(rank, placement, elims, late, opp);
+      const score = document.getElementById("score");
+      score.textContent = (r.finalPoints > 0 ? "+" : "") + r.finalPoints + "%";
+      score.className = r.finalPoints > 0 ? "pos" : r.finalPoints < 0 ? "neg" : "neu";
+      const placeCat = placement <= 5 ? t("pTop5") : placement <= 10 ? t("pTop10") : placement <= 25 ? t("pTop25") : placement <= 50 ? t("pTop50") : t("pTop100");
+      document.getElementById("detail").textContent = r.label + " · " + placeCat + " · " + elims + " / " + late;
+      const cell = (label, value) => `<div><span>${label}</span><b>${value}</b></div>`;
+      document.getElementById("break").innerHTML =
+        cell(t("bPlace"), (r.placementBonus > 0 ? "+" : "") + r.placementBonus + "%") +
+        cell(t("bElim"), (r.elimBonus > 0 ? "+" : "") + r.elimBonus + "%") +
+        cell(t("bLate"), (r.lateBonus > 0 ? "+" : "") + r.lateBonus + "%") +
+        cell(t("bOpp"), "×" + r.oppMul.toFixed(1)) +
+        cell(t("bRank"), "×" + r.rankMul.toFixed(1)) +
+        cell(t("bFinal"), (r.finalPoints > 0 ? "+" : "") + r.finalPoints + "%");
+      document.getElementById("result").classList.add("on");
+    });
+    document.getElementById("form").addEventListener("reset", () => {
+      document.getElementById("result").classList.remove("on");
+      document.getElementById("alert").textContent = "";
+      document.getElementById("placementVal").textContent = "-";
+      document.getElementById("elimVal").textContent = "-";
+      document.getElementById("lateVal").textContent = "-";
+    });
+    document.addEventListener("gb-lang", () => {
+      document.getElementById("gNormal").label = t("gNormal");
+      document.getElementById("gElite").label = t("gElite");
+    });
+  </script>
+</body>
+</html>

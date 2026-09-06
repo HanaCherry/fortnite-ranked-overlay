@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fortnite Ranked — GalaxyBunny Studio</title>
+  <style>
+    :root {
+      --bg: #0c0e14; --card: rgba(255,255,255,0.05); --line: rgba(255,200,230,0.18);
+      --pink: #ff8ec8; --text: #fff7fb; --muted: rgba(255,247,251,0.65);
+      --ok: #7dffa3; --bad: #ff7a9a; --font: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: var(--font); color: var(--text);
+      background: radial-gradient(800px 400px at 10% -10%, rgba(255,79,163,0.2), transparent),
+        radial-gradient(600px 360px at 100% 0%, rgba(80,100,255,0.15), transparent), var(--bg);
+    }
+    .app { max-width: 1040px; margin: 0 auto; padding: 24px 16px 70px; }
+    h1 { font-size: 1.4rem; margin: 0 0 4px; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 18px; }
+    .sub a { color: var(--pink); }
+    .grid { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 14px 16px; backdrop-filter: blur(10px);
+    }
+    .card h2 {
+      font-size: 0.82rem; margin: 0 0 12px; color: var(--pink);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; align-items: end; }
+    label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); flex: 1; min-width: 110px; }
+    label.check { flex-direction: row; align-items: center; gap: 8px; min-width: auto; margin-right: 10px; }
+    label.check input { width: auto; }
+    input, select {
+      background: rgba(0,0,0,0.35); border: 1px solid var(--line); border-radius: 10px;
+      color: var(--text); padding: 9px 10px; font-size: 14px;
+    }
+    button {
+      border: 0; border-radius: 10px; padding: 10px 14px; font-weight: 700; cursor: pointer;
+      background: linear-gradient(135deg, #ff4fa3, #7a6bff); color: #fff;
+    }
+    button.secondary { background: rgba(255,255,255,0.1); }
+    .preview {
+      border-radius: 14px; padding: 14px;
+      background: linear-gradient(145deg, rgba(255,142,200,0.12), rgba(20,10,30,0.5));
+      border: 1px solid var(--line);
+    }
+    .rank-big { font-size: 1.7rem; font-weight: 800; margin: 4px 0; }
+    .bar { height: 10px; border-radius: 99px; background: rgba(0,0,0,0.4); overflow: hidden; margin: 8px 0; }
+    .bar > i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, #ff4fa3, #f0c14b); transition: width .35s; }
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 8px; }
+    .stat { text-align: center; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 8px 4px; }
+    .stat b { display: block; font-size: 1.05rem; }
+    .stat span { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+    .status { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .status.ok { color: var(--ok); } .status.err { color: var(--bad); }
+    .hint { font-size: 12px; color: var(--muted); line-height: 1.45; margin-bottom: 10px; }
+    .links code {
+      display: block; background: rgba(0,0,0,0.35); padding: 8px 10px; border-radius: 8px;
+      font-size: 12px; margin: 6px 0; word-break: break-all;
+    }
+    .span-2 { grid-column: 1 / -1; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; background: rgba(255,142,200,0.2); font-size: 11px; margin-left: 6px; }
+    .checks { display: flex; flex-wrap: wrap; gap: 6px 4px; margin-bottom: 10px; }
+    .log { max-height: 150px; overflow: auto; font-size: 12px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 8px; font-family: Consolas, monospace; }
+    .log div { padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .callout {
+      border-left: 3px solid var(--pink); padding: 8px 12px; background: rgba(255,79,163,0.08);
+      border-radius: 0 10px 10px 0; font-size: 12px; color: var(--muted); margin-bottom: 10px;
+    }
+  </style>
+  <link rel="stylesheet" href="/studio.css"><link rel="stylesheet" href="/appearance.css">
+  <link rel="icon" href="/brand/studio-logo.png">
+</head>
+<body>
+  <div class="galaxy-background" aria-hidden="true"><div class="galaxy-nebula nebula-violet"></div><div class="galaxy-nebula nebula-blue"></div><div class="galaxy-nebula nebula-pink"></div><canvas id="galaxyStars"></canvas></div>
+<aside class="sidebar">
+  <div><a class="studio-brand" href="/control.html"><img src="/brand/studio-logo.png" alt="Logo GalaxyBunny Studio" width="64" height="64"><div><strong>GalaxyBunny</strong><small>Studio</small></div></a><div class="product-name">Fortnite <span>Ranked</span></div></div>
+  <nav aria-label="Navigation principale">
+    <a class="active" href="/control.html#overview"><span>01</span>Tableau de bord</a>
+    <a href="/control.html#profile"><span>02</span>Profil Epic</a>
+    <a href="/control.html#appearance"><span>03</span>Apparence</a>
+    <a href="/control.html#obs"><span>04</span>OBS / Streamlabs</a>
+  </nav><div class="side-foot"><b>Votre stream, votre progression.</b><br>Overlay local pour Fortnite.<br>GalaxyBunny Studio</div>
+</aside>
+  <div class="app">
+    <header class="studio-top" id="overview"><div><div class="eyebrow">ESPACE STREAM</div><h1>Tableau de bord</h1><p class="sub">Configurez votre rang et votre overlay Fortnite.</p></div><a class="header-action" href="/overlay.html" target="_blank" rel="noopener">Ouvrir l’overlay ↗</a></header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Aperçu live</h2>
+        <div class="preview">
+          <div style="font-size:12px;color:var(--muted)" id="pvName">—</div>
+          <div class="rank-big" id="pvRank">—</div>
+          <div class="bar"><i id="pvBar"></i></div>
+          <div style="font-size:12px;color:var(--muted)" id="pvProg">0%</div>
+          <div class="stats">
+            <div class="stat"><b id="pvK">0</b><span>Kills</span></div>
+            <div class="stat"><b id="pvW">0</b><span>Wins</span></div>
+            <div class="stat"><b id="pvKd">0</b><span>K/D</span></div>
+            <div class="stat"><b id="pvM">0</b><span>Games</span></div>
+          </div>
+          <div class="status" id="status">…</div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button type="button" id="btnPoll">Actualiser</button>
+          <button type="button" id="btnTracker">Sync Fortnite Tracker</button>
+          <button type="button" class="secondary" id="btnSession">Reset session</button>
+          <button type="button" class="secondary" id="btnOpen">Ouvrir overlay</button>
+        </div>
+      </div>
+
+      <div class="card" id="profile">
+        <h2>Profil Epic</h2>
+        <p class="hint">
+          Renseignez un profil public pour activer la synchronisation avec <a id="profileLink" href="https://fortnitetracker.com/" target="_blank" rel="noopener">Fortnite Tracker</a>. Sans profil, vous pouvez régler le rang manuellement.
+        </p>
+        <div class="row">
+          <label>Pseudo Epic
+            <input type="text" id="epicName" placeholder="Votre pseudo Epic" autocomplete="off" />
+          </label>
+          <label>Intervalle (sec)
+            <input type="number" id="pollSec" min="10" max="120" value="30" />
+          </label>
+          <button type="button" id="btnSavePseudo">Tracker ce pseudo</button>
+        </div>
+        <div class="status" id="pseudoStatus">—</div>
+      </div>
+
+      
+
+      <div class="card" id="rank-settings">
+        <h2>Rang & progression</h2>
+        <p class="hint">
+          Réglez le rang manuellement ou synchronisez le profil public. La disponibilité et le délai des données dépendent de Fortnite Tracker.
+        </p>
+        <div class="row">
+          <label>Mode
+            <select id="mode">
+              <option value="builds">Builds</option>
+              <option value="zero_build">Zero Build</option>
+            </select>
+          </label>
+          <label>Rang (ton vrai rang)
+            <select id="rank"></select>
+          </label>
+        </div>
+        <div class="row">
+          <label>Progression %
+            <input type="number" id="progress" min="0" max="100" value="0" />
+          </label>
+          <button type="button" id="btnSaveRank">Appliquer mon rang</button>
+        </div>
+        <div class="row">
+          <button type="button" class="secondary" id="btnPlus5">+5 %</button>
+          <button type="button" class="secondary" id="btnMinus5">−5 %</button>
+          <button type="button" class="secondary" id="btnRankUp">Rank up</button>
+          <button type="button" class="secondary" id="btnOpenTracker">Ouvrir mon Tracker</button>
+        </div>
+        <div class="status" id="rankStatus">—</div>
+      </div>
+
+      
+
+      <div class="card span-2" id="appearance">
+        <h2>Apparence de l’overlay</h2><div class="appearance-section"><h3>Styles de l’overlay</h3><p class="hint">Choisissez un univers visuel. Les images montrent un exemple de rang ; votre rang actuel reste inchangé.</p><input type="hidden" id="ovTheme" value="classic"><div class="theme-gallery" role="group" aria-label="Style de l’overlay"><button type="button" class="theme-choice" data-theme-choice="classic" aria-pressed="true"><span class="theme-thumbnail theme-classic"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>65 % · RANKED</small></span></span></span><span class="choice-title">Classique<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Transparent, fidèle au rang</span></button><button type="button" class="theme-choice" data-theme-choice="bunny" aria-pressed="false"><span class="theme-thumbnail theme-bunny"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>GALAXIE ASTRALE</small></span></span></span><span class="choice-title">Galaxie astrale<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Nébuleuse rose-violet & poussière d’étoiles</span></button><button type="button" class="theme-choice" data-theme-choice="galaxy" aria-pressed="false"><span class="theme-thumbnail theme-galaxy"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>65 % · RANKED</small></span></span></span><span class="choice-title">Galaxy<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Violet cosmique & lumière rose</span></button><button type="button" class="theme-choice" data-theme-choice="neon" aria-pressed="false"><span class="theme-thumbnail theme-neon"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>65 % · RANKED</small></span></span></span><span class="choice-title">Néon<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Contours cyan & énergie électrique</span></button><button type="button" class="theme-choice" data-theme-choice="frost" aria-pressed="false"><span class="theme-thumbnail theme-frost"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>65 % · RANKED</small></span></span></span><span class="choice-title">Givre<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Verre bleu & lumière polaire</span></button><button type="button" class="theme-choice" data-theme-choice="royal" aria-pressed="false"><span class="theme-thumbnail theme-royal"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>65 % · RANKED</small></span></span></span><span class="choice-title">Royal<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Noir profond & finitions dorées</span></button><button type="button" class="theme-choice" data-theme-choice="minimal" aria-pressed="false"><span class="theme-thumbnail theme-minimal"><span class="style-surface"><img src="/ranks/13.png" alt="" width="58" height="58"><span><b>DIAMOND III</b><span class="sample-progress"><i></i></span><small>65 % · RANKED</small></span></span></span><span class="choice-title">Minimal<span class="choice-check" aria-hidden="true">✓</span></span><span class="choice-description">Sobre, compact & monochrome</span></button></div></div>
+<div class="appearance-section"><h3>Styles de badge</h3><p class="hint">Le symbole de votre rang est conservé dans chaque finition.</p><input type="hidden" id="ovBadge" value="fortnite"><div class="badge-gallery" role="group" aria-label="Style du badge"><button type="button" class="badge-choice" data-badge-choice="fortnite" aria-pressed="true"><span class="badge-thumbnail badge-fortnite"><span class="logo-wrap"><img src="/ranks/13.png" alt="" width="70" height="70"></span></span><span class="choice-title">Fortnite<span class="choice-check" aria-hidden="true">✓</span></span></button><button type="button" class="badge-choice" data-badge-choice="bunny" aria-pressed="false"><span class="badge-thumbnail badge-bunny"><span class="logo-wrap"><img src="/ranks/13.png" alt="" width="70" height="70"></span></span><span class="choice-title">Galaxie astrale<span class="choice-check" aria-hidden="true">✓</span></span></button><button type="button" class="badge-choice" data-badge-choice="orbit" aria-pressed="false"><span class="badge-thumbnail badge-orbit"><span class="logo-wrap"><img src="/ranks/13.png" alt="" width="70" height="70"></span></span><span class="choice-title">Orbite<span class="choice-check" aria-hidden="true">✓</span></span></button><button type="button" class="badge-choice" data-badge-choice="shield" aria-pressed="false"><span class="badge-thumbnail badge-shield"><span class="logo-wrap"><img src="/ranks/13.png" alt="" width="70" height="70"></span></span><span class="choice-title">Écusson<span class="choice-check" aria-hidden="true">✓</span></span></button><button type="button" class="badge-choice" data-badge-choice="crystal" aria-pressed="false"><span class="badge-thumbnail badge-crystal"><span class="logo-wrap"><img src="/ranks/13.png" alt="" width="70" height="70"></span></span><span class="choice-title">Cristal<span class="choice-check" aria-hidden="true">✓</span></span></button><button type="button" class="badge-choice" data-badge-choice="medal" aria-pressed="false"><span class="badge-thumbnail badge-medal"><span class="logo-wrap"><img src="/ranks/13.png" alt="" width="70" height="70"></span></span><span class="choice-title">Médaillon<span class="choice-check" aria-hidden="true">✓</span></span></button></div><p class="status" id="styleStatus" role="status">Sélectionnez un style pour l’appliquer à l’overlay.</p></div>
+<div class="appearance-section"><h3>Aperçu de votre overlay</h3><div class="overlay-preview-stage"><iframe src="/overlay.html?preview=1" title="Aperçu de votre overlay avec les styles sélectionnés" loading="lazy"></iframe></div><p class="hint">L’aperçu se met à jour automatiquement. Le fond quadrillé représente la transparence.</p></div>
+        <p class="hint"><strong>Coché = visible</strong> sur l’overlay · Décoche pour enlever. Applique auto à chaque clic.</p>
+        <div class="row">
+          <label>Layout
+            <select id="ovLayout">
+              <option value="banner">Bannière (rank + kills)</option>
+              <option value="full">Full (rank + stats profil)</option>
+              <option value="compact">Compact</option>
+            </select>
+          </label>
+          <label>Position
+            <select id="ovPos">
+              <option value="bottom-right">Bas droite</option>
+              <option value="bottom-left">Bas gauche</option>
+              <option value="top-right">Haut droite</option>
+              <option value="top-left">Haut gauche</option>
+            </select>
+          </label>
+          <label>Stats panel
+            <select id="ovStatsSrc">
+              <option value="lifetime">Profil lifetime</option>
+              <option value="session">Session stream</option>
+            </select>
+          </label>
+          <label>Opacité
+            <input type="number" id="ovOpacity" min="0.15" max="1" step="0.05" value="1" />
+          </label>
+          <label>Échelle
+            <input type="number" id="ovScale" min="0.5" max="2" step="0.05" value="1" />
+          </label>
+        </div>
+        <div class="checks" id="visChecks">
+          <label class="check"><input type="checkbox" id="ovTransparent" checked /> Fond transparent</label>
+          <label class="check"><input type="checkbox" id="ovLogo" checked /> Badge / logo rank</label>
+          <label class="check"><input type="checkbox" id="ovStars" checked /> Étoiles autour du badge</label>
+          <label class="check"><input type="checkbox" id="ovGlow" checked /> Glow / aura badge</label>
+          <label class="check"><input type="checkbox" id="ovName" checked /> Nom du rank</label>
+          <label class="check"><input type="checkbox" id="ovMode" checked /> Label mode (Builds / ZB)</label>
+          <label class="check"><input type="checkbox" id="ovProgress" checked /> Barre progression %</label>
+          <label class="check"><input type="checkbox" id="ovLiveKills" checked /> Kills live</label>
+          <label class="check"><input type="checkbox" id="ovLiveDeaths" checked /> Deaths live</label>
+          <label class="check"><input type="checkbox" id="ovLiveStreak" checked /> Streak live</label>
+          <label class="check"><input type="checkbox" id="ovStats" /> Stats profil (wins/kd…)</label>
+          <label class="check"><input type="checkbox" id="ovProfile" /> Pseudo sur overlay</label>
+          <label class="check"><input type="checkbox" id="ovToasts" checked /> Toasts (kill / rank up)</label>
+          <label class="check"><input type="checkbox" id="ovCelebrate" checked /> Animation rank up</label>
+        </div>
+        <div class="row">
+          <button type="button" id="btnSaveOverlay">Appliquer options</button>
+          <button type="button" class="secondary" id="btnPresetBanner">Preset bannière</button>
+          <button type="button" class="secondary" id="btnPresetFull">Preset full</button>
+          <button type="button" class="secondary" id="btnPresetMinimal">Preset minimal (badge+rank)</button>
+          <button type="button" class="secondary" id="btnAllOn">Tout afficher</button>
+          <button type="button" class="secondary" id="btnAllOff">Tout cacher (sauf badge)</button>
+        </div>
+        <div class="status" id="ovStatus">—</div>
+      </div>
+
+      
+
+      <div class="card" id="obs">
+        <h2>OBS / Streamlabs</h2>
+        <div class="links">
+          <div class="hint">Source Navigateur · fond transparent</div>
+          <code><span data-local-url="/overlay.html"></span></code><button type="button" class="secondary" id="copyOverlay">Copier l’URL</button><span id="copyStatus" class="status" role="status"></span>
+          <div class="hint">Taille conseillée bannière : <strong>700 × 160</strong> · full : <strong>1100 × 220</strong></div>
+          <div class="hint">Lance <code>LANCER.bat</code> avant le stream.</div>
+        </div>
+      </div>
+
+      <div class="card span-2">
+        <h2>Événements</h2>
+        <div class="log" id="log">—</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/studio.js" defer></script>
+  <script>
+    const API = location.origin;
+    const ladder = [
+      "Bronze III","Bronze II","Bronze I",
+      "Silver III","Silver II","Silver I",
+      "Gold III","Gold II","Gold I",
+      "Platinum III","Platinum II","Platinum I",
+      "Diamond III","Diamond II","Diamond I",
+      "Elite III","Elite II","Elite I",
+      "Champion III","Champion II","Champion I",
+      "Unreal",
+      "Unreal Legends"
+    ];
+    const rankSel = document.getElementById("rank");
+    ladder.forEach((r) => {
+      const o = document.createElement("option");
+      o.value = r; o.textContent = r;
+      rankSel.appendChild(o);
+    });
+
+    async function post(path, body) {
+      const r = await fetch(API + path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body || {}),
+      });
+      return r.json();
+    }
+
+    function paint(s) {
+      const r = s.ranked || {};
+      document.getElementById("pvName").textContent = s.epicName || "—";
+      document.getElementById("pvRank").textContent = r.rank || "—";
+      document.getElementById("pvRank").style.color = r.color || "#ff8ec8";
+      const p = Number(r.progress) || 0;
+      document.getElementById("pvBar").style.width = p + "%";
+      document.getElementById("pvProg").textContent =
+        p + "% · " + (s.activeMode === "zero_build" ? "Zero Build" : "Builds");
+      const life = s.lifetime || {};
+      document.getElementById("pvK").textContent = life.kills ?? 0;
+      document.getElementById("pvW").textContent = life.wins ?? 0;
+      document.getElementById("pvKd").textContent = life.kd != null ? Number(life.kd).toFixed(2) : "0";
+      document.getElementById("pvM").textContent = life.matches ?? 0;
+
+      const st = document.getElementById("status");
+      if (s.source === "fortnitetracker" && !s.lastError) {
+        st.className = "status ok";
+        const tl = s.trackerLive || {};
+        st.textContent =
+          "Fortnite Tracker live · " + (r.rank || "—") + " " + (r.progress || 0) + "%" +
+          (tl.elo ? " · " + tl.elo + " Elo" : "") +
+          (tl.peak ? " · peak " + tl.peak : "") +
+          " · " + (s.lastFetch || "");
+      } else if ((s.source === "tracker" || s.source === "fortnite-api") && !s.lastError) {
+        st.className = "status ok";
+        st.textContent = "Live (" + s.source + ") · " + (s.lastFetch || "");
+      } else if (s.lastError === "missing_epic_name") {
+        st.className = "status";
+        st.textContent = "Mode manuel · Ajoutez un profil pour synchroniser.";
+      } else if (s.lastError) {
+        st.className = "status err";
+        st.textContent = "Erreur / mode manuel : " + s.lastError;
+      } else {
+        st.className = "status";
+        st.textContent = "Source : " + (s.source || "manuel");
+      }
+
+      document.getElementById("mode").value = s.activeMode || "builds";
+      if (r.rank && ladder.includes(r.rank)) rankSel.value = r.rank;
+      document.getElementById("progress").value = p;
+
+      const name = s.epicName || "";
+      const epicInput = document.getElementById("epicName");
+      if (epicInput && document.activeElement !== epicInput) epicInput.value = name;
+      const pl = document.getElementById("profileLink");
+      if (pl) {
+        pl.href = s.profileUrl || ("https://fortnitetracker.com/profile/all/" + encodeURIComponent(name));
+        pl.textContent = name ? name + " sur Tracker" : "Fortnite Tracker";
+      }
+      document.getElementById("pseudoStatus").textContent =
+        name ? ("Tracking " + name + " · toutes les " + (s.pollSeconds || 15) + "s") : "Entre un pseudo";
+      const pollEl = document.getElementById("pollSec");
+      if (pollEl && document.activeElement !== pollEl && s.pollSeconds) pollEl.value = s.pollSeconds;
+      document.getElementById("rankStatus").textContent =
+        "Rang overlay : " + (r.rank || "—") + " (" + (s.activeMode === "zero_build" ? "ZB" : "Builds") + ")";
+      const ov = s.overlay || {};
+      document.getElementById("ovTheme").value = ov.themeStyle || "classic";
+      document.getElementById("ovBadge").value = ov.badgeStyle || "fortnite";
+      document.querySelectorAll("[data-theme-choice]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.themeChoice === (ov.themeStyle || "classic"))));
+      document.querySelectorAll("[data-badge-choice]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.badgeChoice === (ov.badgeStyle || "fortnite"))));
+      if (ov.layout) document.getElementById("ovLayout").value = ov.layout;
+      if (ov.position) document.getElementById("ovPos").value = ov.position;
+      if (ov.statsSource) document.getElementById("ovStatsSrc").value = ov.statsSource;
+      if (ov.opacity != null) document.getElementById("ovOpacity").value = ov.opacity;
+      if (ov.scale != null) document.getElementById("ovScale").value = ov.scale;
+      const setChk = (id, val, defTrue) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.checked = defTrue ? val !== false : !!val;
+      };
+      setChk("ovTransparent", ov.transparent, true);
+      setChk("ovLogo", ov.showLogo, true);
+      setChk("ovStars", ov.showStars, true);
+      setChk("ovGlow", ov.showGlow, true);
+      setChk("ovName", ov.showRankName, true);
+      setChk("ovMode", ov.showModeLabel, true);
+      setChk("ovProgress", ov.showProgress, true);
+      setChk("ovLiveKills", ov.showLiveKills, true);
+      setChk("ovLiveDeaths", ov.showLiveDeaths, true);
+      setChk("ovLiveStreak", ov.showLiveStreak, true);
+      setChk("ovStats", ov.showStats, false);
+      setChk("ovProfile", ov.showProfileName, false);
+      setChk("ovToasts", ov.showToasts, true);
+      setChk("ovCelebrate", ov.celebrateRankUp, true);
+
+      const log = document.getElementById("log");
+      log.innerHTML = "";
+      (s.events || []).slice(0, 12).forEach((ev) => {
+        const d = document.createElement("div");
+        d.textContent = (ev.t || "") + " · " + ev.type + " " + JSON.stringify(ev).slice(0, 100);
+        log.appendChild(d);
+      });
+      if (!(s.events || []).length) log.textContent = "Aucun événement.";
+    }
+
+    function readOverlayForm() {
+      const g = (id) => document.getElementById(id);
+      return {
+        layout: g("ovLayout").value,
+        position: g("ovPos").value,
+        statsSource: g("ovStatsSrc").value,
+        opacity: Number(g("ovOpacity").value) || 1,
+        scale: Number(g("ovScale").value) || 1,
+        transparent: g("ovTransparent").checked,
+        showLogo: g("ovLogo").checked,
+        showStars: g("ovStars").checked,
+        showGlow: g("ovGlow").checked,
+        showRankName: g("ovName").checked,
+        showModeLabel: g("ovMode").checked,
+        showProgress: g("ovProgress").checked,
+        showLiveKills: g("ovLiveKills").checked,
+        showLiveDeaths: g("ovLiveDeaths").checked,
+        showLiveStreak: g("ovLiveStreak").checked,
+        showStats: g("ovStats").checked,
+        showProfileName: g("ovProfile").checked,
+        showToasts: g("ovToasts").checked,
+        celebrateRankUp: g("ovCelebrate").checked,
+        iconStyle: "fortnite",
+        themeStyle: g("ovTheme").value,
+        badgeStyle: g("ovBadge").value,
+      };
+    }
+
+    async function applyOverlayNow(msg) {
+      const j = await post("/api/overlay", readOverlayForm());
+      if (j.state) paint(j.state);
+      else await refresh();
+      const st = document.getElementById("ovStatus");
+      if (st) st.textContent = msg || "Options appliquées sur l’overlay";
+    }
+
+    async function refresh() {
+      const r = await fetch(API + "/api/state?t=" + Date.now());
+      paint(await r.json());
+    }
+
+    document.getElementById("btnPoll").onclick = async () => {
+      const j = await post("/api/poll", {});
+      if (j.state) paint(j.state);
+    };
+    document.getElementById("btnTracker").onclick = async () => {
+      const st = document.getElementById("status");
+      st.className = "status";
+      st.textContent = "Lecture fortnitetracker.com… (5–15 s)";
+      try {
+        const j = await post("/api/tracker-sync", {});
+        if (j.state) paint(j.state);
+        if (j.tracker && j.tracker.ranked && j.tracker.ranked.builds) {
+          st.className = "status ok";
+          st.textContent =
+            "Tracker OK · " + j.tracker.ranked.builds.rank + " " + j.tracker.ranked.builds.progress + "%";
+        }
+      } catch (e) {
+        st.className = "status err";
+        st.textContent = "Tracker inaccessible";
+      }
+    };
+    document.getElementById("btnSession").onclick = async () => {
+      await post("/api/session/reset", {});
+      await refresh();
+    };
+    document.getElementById("btnOpen").onclick = () => window.open(API + "/overlay.html", "_blank");
+
+    document.getElementById("btnSavePseudo").onclick = async () => {
+      const name = document.getElementById("epicName").value.trim();
+      if (!name) {
+        alert("Entre un pseudo Epic");
+        return;
+      }
+      const pollSeconds = Math.max(10, Number(document.getElementById("pollSec").value) || 15);
+      document.getElementById("pseudoStatus").textContent = "Changement → " + name + " · lecture Tracker…";
+      const j = await post("/api/config", { epicName: name, pseudo: name, pollSeconds });
+      if (j.state) paint(j.state);
+      const p = await post("/api/tracker-sync", {});
+      if (p.state) paint(p.state);
+      document.getElementById("pseudoStatus").textContent =
+        "Tracking " + name + " toutes les " + pollSeconds + "s" +
+        (p.state && p.state.lastError ? " · " + p.state.lastError : " · OK");
+    };
+
+    document.getElementById("btnOpenTracker").onclick = () => {
+      const name = (document.getElementById("epicName").value || "").trim();
+      window.open(
+        "https://fortnitetracker.com/profile/all/" + encodeURIComponent(name),
+        "_blank"
+      );
+    };
+
+    document.getElementById("btnSaveRank").onclick = async () => {
+      const j = await post("/api/ranked", {
+        mode: document.getElementById("mode").value,
+        rank: rankSel.value,
+        progress: Number(document.getElementById("progress").value) || 0,
+        active: true,
+        activeMode: document.getElementById("mode").value,
+      });
+      if (j.state) paint(j.state);
+      document.getElementById("rankStatus").textContent =
+        "Rang appliqué : " + rankSel.value + " · visible sur l’overlay";
+    };
+    document.getElementById("btnPlus5").onclick = () => {
+      document.getElementById("progress").value = Math.min(100, (Number(document.getElementById("progress").value) || 0) + 5);
+      document.getElementById("btnSaveRank").click();
+    };
+    document.getElementById("btnMinus5").onclick = () => {
+      document.getElementById("progress").value = Math.max(0, (Number(document.getElementById("progress").value) || 0) - 5);
+      document.getElementById("btnSaveRank").click();
+    };
+    document.getElementById("btnRankUp").onclick = () => {
+      const idx = ladder.indexOf(rankSel.value);
+      if (idx >= 0 && idx < ladder.length - 1) {
+        rankSel.value = ladder[idx + 1];
+        document.getElementById("progress").value = 5;
+        document.getElementById("btnSaveRank").click();
+      }
+    };
+
+    document.getElementById("btnSaveOverlay").onclick = () => applyOverlayNow("Options appliquées");
+    // Auto-apply quand on coche/décoche
+    document.getElementById("visChecks")?.querySelectorAll("input[type=checkbox]").forEach((inp) => {
+      inp.addEventListener("change", () => applyOverlayNow("Visible: mis à jour"));
+    });
+    ["ovLayout", "ovPos", "ovStatsSrc", "ovOpacity", "ovScale"].forEach((id) => {
+      document.getElementById(id)?.addEventListener("change", () => applyOverlayNow("Options mises à jour"));
+    });
+
+    document.getElementById("btnPresetBanner").onclick = async () => {
+      document.getElementById("ovLayout").value = "banner";
+      document.getElementById("ovTransparent").checked = true;
+      document.getElementById("ovLogo").checked = true;
+      document.getElementById("ovStars").checked = true;
+      document.getElementById("ovGlow").checked = true;
+      document.getElementById("ovName").checked = true;
+      document.getElementById("ovMode").checked = true;
+      document.getElementById("ovProgress").checked = true;
+      document.getElementById("ovLiveKills").checked = true;
+      document.getElementById("ovLiveDeaths").checked = true;
+      document.getElementById("ovLiveStreak").checked = true;
+      document.getElementById("ovStats").checked = false;
+      document.getElementById("ovProfile").checked = false;
+      document.getElementById("ovToasts").checked = true;
+      await applyOverlayNow("Preset bannière");
+    };
+    document.getElementById("btnPresetFull").onclick = async () => {
+      document.getElementById("ovLayout").value = "full";
+      document.getElementById("ovTransparent").checked = false;
+      document.getElementById("ovLogo").checked = true;
+      document.getElementById("ovStars").checked = true;
+      document.getElementById("ovName").checked = true;
+      document.getElementById("ovProgress").checked = true;
+      document.getElementById("ovStats").checked = true;
+      document.getElementById("ovProfile").checked = true;
+      document.getElementById("ovLiveKills").checked = true;
+      await applyOverlayNow("Preset full");
+    };
+    document.getElementById("btnPresetMinimal").onclick = async () => {
+      document.getElementById("ovLayout").value = "banner";
+      document.getElementById("ovTransparent").checked = true;
+      document.getElementById("ovLogo").checked = true;
+      document.getElementById("ovStars").checked = true;
+      document.getElementById("ovGlow").checked = true;
+      document.getElementById("ovName").checked = true;
+      document.getElementById("ovMode").checked = false;
+      document.getElementById("ovProgress").checked = false;
+      document.getElementById("ovLiveKills").checked = false;
+      document.getElementById("ovLiveDeaths").checked = false;
+      document.getElementById("ovLiveStreak").checked = false;
+      document.getElementById("ovStats").checked = false;
+      document.getElementById("ovProfile").checked = false;
+      document.getElementById("ovToasts").checked = false;
+      await applyOverlayNow("Preset minimal");
+    };
+    document.getElementById("btnAllOn").onclick = async () => {
+      document.querySelectorAll("#visChecks input[type=checkbox]").forEach((c) => { c.checked = true; });
+      document.getElementById("ovStats").checked = true;
+      document.getElementById("ovProfile").checked = true;
+      await applyOverlayNow("Tout affiché");
+    };
+    document.getElementById("btnAllOff").onclick = async () => {
+      document.querySelectorAll("#visChecks input[type=checkbox]").forEach((c) => { c.checked = false; });
+      document.getElementById("ovLogo").checked = true;
+      document.getElementById("ovName").checked = true;
+      document.getElementById("ovTransparent").checked = true;
+      await applyOverlayNow("Minimal forcé (badge + rank)");
+    };
+
+    document.querySelectorAll('[data-theme-choice], [data-badge-choice]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const field = button.dataset.themeChoice ? 'ovTheme' : 'ovBadge';
+        document.getElementById(field).value = button.dataset.themeChoice || button.dataset.badgeChoice;
+        const buttons = document.querySelectorAll('[data-theme-choice], [data-badge-choice]');
+        buttons.forEach(b => b.disabled = true);
+        const status = document.getElementById('styleStatus');
+        status.textContent = 'Application du style…';
+        try {
+          const response = await post('/api/overlay', {themeStyle: document.getElementById('ovTheme').value, badgeStyle: document.getElementById('ovBadge').value});
+          if (!response.ok) throw new Error('save_failed');
+          if (response.state) paint(response.state);
+          status.textContent = 'Style appliqué · aperçu et overlay mis à jour.';
+        } catch { status.textContent = 'Impossible d’appliquer le style. Réessayez.'; await refresh().catch(() => {}); }
+        finally { buttons.forEach(b => b.disabled = false); }
+      });
+    });
+    refresh();
+    setInterval(refresh, 4000);
+  </script>
+</body>
+</html>

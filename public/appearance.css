@@ -1,0 +1,70 @@
+/* Shared visual language for the gallery images and the actual OBS renderer. */
+.theme-classic{--style-accent:#bbadff;--style-bg:transparent;--style-border:transparent;--style-radius:12px}
+.theme-galaxy{--style-accent:#ec9cff;--style-bg:radial-gradient(ellipse at 10% 100%,#854be877,transparent 65%),radial-gradient(ellipse at 95% 10%,#d14caf66,transparent 65%),#110e2be8;--style-border:#c795ff80;--style-radius:22px}
+.theme-neon{--style-accent:#5ef9ef;--style-bg:linear-gradient(115deg,#051c27ee,#19102aee);--style-border:#5ef9ef;--style-radius:4px}
+.theme-frost{--style-accent:#a9e7ff;--style-bg:linear-gradient(130deg,#b4e9ff38,#244963cc);--style-border:#c2f0ff99;--style-radius:20px}
+.theme-royal{--style-accent:#f6cf75;--style-bg:linear-gradient(125deg,#332c19ed,#0e1019f5);--style-border:#d9b459aa;--style-radius:8px}
+.theme-minimal{--style-accent:#fff;--style-bg:#10131bea;--style-border:#ffffff24;--style-radius:3px}
+body:not(.theme-classic) .banner,body:not(.theme-classic) .panel,.theme-thumbnail .style-surface{background:var(--style-bg);border:1px solid var(--style-border);border-radius:var(--style-radius)}
+body:not(.theme-classic) .banner{padding:10px 20px 10px 6px}
+body:not(.theme-classic) .panel{padding:16px}
+body:not(.theme-classic) .rank-name{color:var(--style-accent)}
+body:not(.theme-classic) .bar>i{background:linear-gradient(90deg,var(--rank),var(--style-accent))}
+body.theme-neon .banner,body.theme-neon .panel{box-shadow:inset 0 0 18px #25fff015,0 0 12px #25fff025;border-left-width:4px}
+body.theme-frost .banner,body.theme-frost .panel{backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 #ffffff55}
+body.theme-royal .rank-name{letter-spacing:2px}body.theme-royal .banner,body.theme-royal .panel{border-top:3px solid var(--style-accent)}
+body.theme-minimal .rank-name{font-size:23px;font-weight:600;letter-spacing:0}body.theme-minimal .banner{gap:0}
+.badge-orbit .logo-wrap,.badge-shield .logo-wrap,.badge-crystal .logo-wrap,.badge-medal .logo-wrap{padding:9px;isolation:isolate}
+.badge-orbit .logo-wrap{border:2px solid #c0a2ff;border-radius:50%;background:radial-gradient(circle,#735cff33,transparent 70%);box-shadow:0 0 16px #a37dff66,inset 0 0 12px #a37dff44}
+.badge-orbit .logo-wrap:after{content:"";position:absolute;inset:-7px;border:1px solid #eeadff80;border-radius:50%;transform:rotate(-30deg) scaleY(.65);pointer-events:none}
+.badge-shield .logo-wrap{background:linear-gradient(135deg,#95b8ed,#29466b 40%,#0c1429);clip-path:polygon(50% 0,96% 18%,90% 70%,50% 100%,10% 70%,4% 18%);padding:12px 10px 15px}
+.badge-crystal .logo-wrap{background:conic-gradient(from 45deg,#a9f0ff88,#ab79ff22,#fff8,#867fff44,#a9f0ff88);clip-path:polygon(28% 0,72% 0,100% 28%,100% 72%,72% 100%,28% 100%,0 72%,0 28%);padding:13px}
+.badge-medal .logo-wrap{border-radius:50%;border:4px double #f7d279;background:radial-gradient(circle,#60451b,#16101b 70%);box-shadow:0 3px 15px #b988253d;padding:10px}
+body.is-preview .wrap{left:16px!important;right:auto!important;top:24px!important;bottom:auto!important;transform:scale(.78)!important;transform-origin:top left!important}
+@media(max-width:600px){body.is-preview .wrap{transform:scale(.46)!important}}
+@media(prefers-reduced-motion:reduce){.logo-wrap{animation:none!important}}
+/* Appearance picker */
+.appearance-section{padding:20px 0;border-top:1px solid var(--line)}
+.appearance-section h3{margin:0 0 8px;font-size:16px;color:#f4edff}
+.theme-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:16px 0}
+.theme-choice,.badge-choice{min-width:0;display:flex;flex-direction:column;text-align:left;background:#090b18!important;border:1px solid #ffffff20!important;border-radius:12px;padding:10px!important;color:#eee;overflow:visible}
+.theme-choice:hover,.badge-choice:hover{border-color:#aa93ff!important;transform:translateY(-2px)}
+.theme-choice[aria-pressed=true],.badge-choice[aria-pressed=true]{border-color:#b69fff!important;box-shadow:0 0 0 2px #9578ff50;background:#19152e!important}
+.theme-choice:disabled,.badge-choice:disabled{opacity:.7;cursor:wait}
+.theme-thumbnail{width:100%;height:120px;display:flex;align-items:center;padding:10px;border-radius:8px;background-color:#121322;background-image:linear-gradient(45deg,#ffffff04 25%,transparent 25%,transparent 75%,#ffffff04 75%),linear-gradient(45deg,#ffffff04 25%,transparent 25%,transparent 75%,#ffffff04 75%);background-position:0 0,8px 8px;background-size:16px 16px}
+.style-surface{width:100%;display:flex;align-items:center;gap:6px;padding:10px 6px;color:var(--style-accent)}
+.style-surface img{width:48px;height:56px;object-fit:contain;filter:drop-shadow(0 0 6px #96cbff50)}
+.style-surface>span{min-width:0;flex:1}.style-surface b{font-size:12px;white-space:nowrap;font-weight:800}.style-surface small{font-size:10px;letter-spacing:.3px;color:#d4d5e7}
+.sample-progress{display:block;margin:6px 0;height:4px;background:#ffffff24;border-radius:9px}.sample-progress i{display:block;width:65%;height:100%;background:var(--style-accent);border-radius:9px}
+.theme-neon .style-surface{box-shadow:0 0 12px #45fff133;border-left-width:3px}.theme-royal .style-surface{border-top:3px solid var(--style-accent)}
+.choice-title{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;font-size:14px;font-weight:650;margin:10px 0 4px}.choice-description{font-size:12px;color:#aab1c4;line-height:1.5;font-weight:400}.choice-check{opacity:0;color:#d5c8ff}[aria-pressed=true]>.choice-title .choice-check{opacity:1}
+.badge-gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:16px 0}
+.badge-thumbnail{display:grid;place-items:center;width:100%;height:112px;background:radial-gradient(ellipse,#7c5dcc22,transparent 70%)}
+.badge-thumbnail .logo-wrap{position:relative;width:80px;height:80px;display:grid;place-items:center}.badge-thumbnail img{width:100%;height:100%;object-fit:contain}
+.overlay-preview-stage{height:230px;overflow:hidden;border:1px solid var(--line);border-radius:12px;background-color:#131521;background-image:linear-gradient(45deg,#ffffff05 25%,transparent 25%,transparent 75%,#ffffff05 75%),linear-gradient(45deg,#ffffff05 25%,transparent 25%,transparent 75%,#ffffff05 75%);background-position:0 0,12px 12px;background-size:24px 24px}
+.overlay-preview-stage iframe{display:block;width:100%;height:100%;border:0}
+@media(max-width:1000px){.theme-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.badge-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:500px){.theme-gallery{grid-template-columns:1fr}.theme-thumbnail{height:120px}.style-surface{max-width:270px;margin:auto}.badge-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.overlay-preview-stage{height:170px}}
+/* Astral galaxy: animated nebula and starlight, without a logo. */
+.theme-bunny{--style-accent:#ffc0e8;--style-bg:radial-gradient(ellipse at 0 90%,#b747a959,transparent 60%),linear-gradient(115deg,#201038ed,#34216be8,#15132af0);--style-border:#efadff99;--style-radius:24px}
+body.theme-bunny .banner,body.theme-bunny .panel,.theme-bunny .style-surface{position:relative;isolation:isolate;padding-right:82px;box-shadow:0 0 20px #d580ef35,inset 0 0 20px #b180ff15;animation:bunny-halo 5s ease-in-out infinite}
+body.theme-bunny .banner:after,body.theme-bunny .panel:after,.theme-bunny .style-surface:after{content:"";position:absolute;right:12px;top:50%;width:62px;height:82px;transform:translateY(-50%);background:radial-gradient(ellipse at 35% 35%,#ffe7fc 0 2%,#f5b4ed88 5%,transparent 22%),radial-gradient(ellipse at 60% 60%,#ad81ffbb,transparent 65%);pointer-events:none;filter:drop-shadow(0 0 8px #ec9dff80)}
+body.theme-bunny .banner:before,body.theme-bunny .panel:before,.theme-bunny .style-surface:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;background-image:radial-gradient(circle at 8% 18%,#fff 0 1px,transparent 2px),radial-gradient(circle at 45% 76%,#ffd0f1 0 1.3px,transparent 2.5px),radial-gradient(circle at 72% 22%,#c6c0ff 0 1px,transparent 2px),radial-gradient(circle at 90% 85%,#fff 0 1px,transparent 2px);background-size:145px 95px;animation:bunny-stars 6s ease-in-out infinite alternate}
+.theme-bunny .style-surface{padding-right:45px}.theme-bunny .style-surface:after{width:34px;height:50px;right:5px}.theme-bunny .style-surface>img{width:36px}
+.badge-bunny .logo-wrap{border:2px solid #ffb6e6;border-radius:50%;padding:11px;background:radial-gradient(circle,#a776e955,#251336cc);box-shadow:0 0 20px #dc8dfa66,inset 0 0 12px #fbaddd44}
+.badge-bunny .logo-wrap:after{content:"";position:absolute;right:-19px;bottom:-5px;width:37px;height:49px;background:radial-gradient(ellipse at 35% 35%,#ffe7fc 0 2%,#f5b4ed88 5%,transparent 22%),radial-gradient(ellipse at 60% 60%,#ad81ffbb,transparent 65%);filter:drop-shadow(0 0 5px #ffc3ec);pointer-events:none}
+.badge-bunny .logo-wrap:before{content:"✦";position:absolute;top:-14px;left:-8px;color:#ffe1f5;font-size:20px;text-shadow:0 0 10px #f6b5ff;animation:bunny-stars 3s ease-in-out infinite alternate}
+.badge-gallery{grid-template-columns:repeat(6,minmax(0,1fr))}
+@keyframes bunny-halo{0%,100%{box-shadow:0 0 14px #d580ef25,inset 0 0 15px #b180ff15}50%{box-shadow:0 0 25px #ed9cdb55,inset 0 0 22px #b180ff25}}
+@keyframes bunny-stars{from{opacity:.35;filter:brightness(.8)}to{opacity:1;filter:brightness(1.25)}}
+@media(max-width:1000px){.badge-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:500px){.badge-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){body.theme-bunny .banner,body.theme-bunny .panel,.theme-bunny .style-surface,body.theme-bunny .banner:before,body.theme-bunny .panel:before,.theme-bunny .style-surface:before,.badge-bunny .logo-wrap:before{animation:none!important}}
+
+/* Pure galaxy effect. The studio brand stays in the dashboard header only. */
+body.theme-bunny .banner,body.theme-bunny .panel,.theme-bunny .style-surface{padding-right:20px}
+body.theme-bunny .banner:after,body.theme-bunny .panel:after,.theme-bunny .style-surface:after{right:0;top:0;width:100%;height:100%;border-radius:inherit;transform:none;z-index:-1;opacity:.65;background:radial-gradient(ellipse at 85% 30%,#f6adf255,transparent 45%),radial-gradient(ellipse at 15% 80%,#8862ff66,transparent 50%);filter:none;animation:astral-nebula 9s ease-in-out infinite alternate}
+.badge-bunny .logo-wrap:after{right:auto;bottom:auto;inset:-8px;width:auto;height:auto;border:1px solid #fbc2ff88;border-radius:50%;background:radial-gradient(circle at 50% 0%,#fff 0 2px,transparent 4px),radial-gradient(circle at 95% 65%,#e7b7ff 0 1px,transparent 3px);filter:drop-shadow(0 0 5px #d992ff);animation:astral-orbit 14s linear infinite}
+@keyframes astral-orbit{to{transform:rotate(360deg)}}
+@keyframes astral-nebula{from{opacity:.35;background-position:0% 0%}to{opacity:.85;background-position:100% 100%}}
+@media(prefers-reduced-motion:reduce){body.theme-bunny .banner:after,body.theme-bunny .panel:after,.theme-bunny .style-surface:after,.badge-bunny .logo-wrap:after{animation:none!important}}

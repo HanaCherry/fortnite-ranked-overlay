@@ -1,0 +1,7 @@
+data/
+config.local.json
+.env*
+node_modules/
+dist/
+*.log
+*.zip

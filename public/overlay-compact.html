@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fortnite Ranked — Compact</title>
+  <link rel="stylesheet" href="overlay.css" /><link rel="stylesheet" href="appearance.css" />
+</head>
+<body class="layout-banner">
+  <div class="wrap bottom-right" id="wrap">
+    <div class="toasts" id="toasts"></div>
+
+    <!-- Badge + rank + kills live -->
+    <div class="banner" id="banner">
+      <div class="badge-stage" id="badgeStage">
+        <canvas class="stars" id="stars" width="160" height="160"></canvas>
+        <div class="logo-wrap" id="logoBanner"></div>
+        <div class="badge-glow" id="badgeGlow"></div>
+      </div>
+      <div class="info">
+        <div class="rank-name" id="rankBanner">—</div>
+        <div class="rank-sub" id="subBanner">Ranked Builds</div>
+        <div class="progress-row" id="progBanner">
+          <div class="bar"><i id="barBanner"></i></div>
+          <div class="pct" id="pctBanner">0%</div>
+        </div>
+        <div class="live-row" id="liveRow">
+          <div class="live-stat kills" id="liveKillsBox">
+            <span class="live-ico">💀</span>
+            <b id="liveKills">0</b>
+            <span class="live-lab">Kills</span>
+          </div>
+          <div class="live-stat deaths">
+            <span class="live-ico">☠️</span>
+            <b id="liveDeaths">0</b>
+            <span class="live-lab">Deaths</span>
+          </div>
+          <div class="live-stat streak">
+            <span class="live-ico">🔥</span>
+            <b id="liveStreak">0</b>
+            <span class="live-lab">Streak</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full panel (optionnel) -->
+    <div class="panel" id="card">
+      <div class="rank-zone">
+        <div class="badge-stage small">
+          <canvas class="stars" id="starsFull" width="140" height="140"></canvas>
+          <div class="logo-wrap" id="logo"></div>
+        </div>
+        <div class="rank-info">
+          <div class="rank-kicker" id="mode">Ranked Builds</div>
+          <div class="rank-name" id="rankLabel">—</div>
+          <div class="progress-row" id="progFull">
+            <div class="bar"><i id="bar"></i></div>
+            <div class="pct" id="progressText">0%</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-zone" id="statsZone">
+        <div class="profile-row" id="profileRow">
+          <div>
+            <div class="profile-name" id="name">—</div>
+            <div class="profile-sub" id="profileSub">Live match</div>
+          </div>
+          <div class="live-pill" id="livePill"><i class="dot"></i><span id="source">…</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><b id="sWins">0</b><span>Wins</span></div>
+          <div class="stat"><b id="sKills">0</b><span>Kills</span></div>
+          <div class="stat"><b id="sKd">0</b><span>K/D</span></div>
+          <div class="stat"><b id="sWinRate">0%</b><span>Win%</span></div>
+          <div class="stat"><b id="sMatches">0</b><span>Matches</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="rank-logos.js"></script>
+  <script src="stars.js"></script>
+  <script>if (!new URLSearchParams(location.search).has("layout")) history.replaceState(null,"",location.pathname+location.search+(location.search?"&":"?")+"layout=compact");</script><script src="overlay.js"></script>
+</body>
+</html>

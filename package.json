@@ -1,0 +1,28 @@
+{
+  "name": "fortnite-ranked-overlay",
+  "version": "2.0.0",
+  "description": "Overlay Fortnite Ranked pour OBS — GalaxyBunny Studio",
+  "main": "server.js",
+  "private": true,
+  "license": "MIT",
+  "homepage": "https://hanacherry.github.io/fortnite-ranked-overlay/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HanaCherry/fortnite-ranked-overlay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HanaCherry/fortnite-ranked-overlay/issues"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test test/*.test.js",
+    "export:github": "node tools/export-github.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "playwright-core": "1.61.1"
+  }
+}

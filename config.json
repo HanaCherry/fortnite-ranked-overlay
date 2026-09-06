@@ -1,0 +1,24 @@
+{
+  "epicName": "",
+  "platform": "epic",
+  "profileUrl": "",
+  "pollSeconds": 30,
+  "port": 8767,
+  "defaultMode": "builds",
+  "modes": [
+    "builds",
+    "zero_build"
+  ],
+  "overlay": {
+    "layout": "banner",
+    "transparent": true,
+    "showLogo": true,
+    "showRankName": true,
+    "showProgress": true,
+    "showProfileName": false,
+    "showStats": false,
+    "position": "bottom-left",
+    "scale": 1,
+    "opacity": 1
+  }
+}
