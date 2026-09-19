@@ -8,7 +8,7 @@ if (fs.existsSync(output)) {
   throw new Error('dist/github existe déjà. Déplacez ce dossier avant de recréer un export propre.');
 }
 const sourceFiles = [
-  '.gitignore', '.npmignore', 'LICENSE', 'README.md', 'README.en.md',
+  '.gitignore', '.npmignore', 'LICENSE', 'LICENSE-MIT-LEGACY', 'README.md', 'README.en.md',
   'package.json', 'package-lock.json',
   'config.json', 'server.js', 'tracker-live.js',
   'LANCER.bat', 'LANCER-SILENCIEUX.vbs', 'INSTALLER.bat',

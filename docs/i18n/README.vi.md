@@ -52,3 +52,9 @@ config.json đi kèm không có tài khoản. Cài đặt ở data/config.json, 
 ---
 
 Fortnite và hình rank thuộc Epic Games và chủ sở hữu. Dự án độc lập, không chính thức.
+
+## Usage terms
+
+The application remains free to use, including in monetized streams and videos. Installation, local builds, backups and configuration needed for that use are permitted. Reusing newly covered code in another project, modifying it, redistributing the application or selling copies requires HanaCherry's prior written permission through this repository's issues.
+
+Previously granted rights are preserved: code already published under MIT remains under MIT, and third-party components keep their licenses. New covered original contributions follow the [free application use license](../../LICENSE). GitHub's viewing and forking rights are preserved.

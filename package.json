@@ -4,7 +4,7 @@
   "description": "Overlay Fortnite Ranked pour OBS — GalaxyBunny Studio",
   "main": "server.js",
   "private": true,
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://hanacherry.github.io/fortnite-ranked-overlay/",
   "repository": {
     "type": "git",

@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://hanacherry.github.io/fortnite-ranked-overlay/?lang=en"><img src="https://img.shields.io/badge/site-multilingual-8670ef?style=for-the-badge" alt="Site"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-c9bcff?style=for-the-badge" alt="MIT"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Free%20use-c9bcff?style=for-the-badge" alt="Usage terms"></a>
   <a href="package.json"><img src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge" alt="Node.js 18+"></a>
 </p>
 
@@ -114,3 +114,9 @@ Tests cover a clean start, local settings isolation, and rank updates. A publish
 ## Identity
 
 Logo: GalaxyBunny Studio. Fortnite and rank artwork belong to Epic Games and their respective owners. This is an independent project and is **not** an official Epic Games product.
+
+## Usage terms
+
+The application remains free to use, including in monetized streams and videos. Installation, local builds, backups and configuration needed for that use are permitted. Reusing newly covered code in another project, modifying it, redistributing the application or selling copies requires HanaCherry's prior written permission through this repository's issues.
+
+Previously granted rights are preserved: code already published under MIT remains under MIT, and third-party components keep their licenses. New covered original contributions follow the [free application use license](LICENSE). GitHub's viewing and forking rights are preserved.

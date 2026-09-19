@@ -52,3 +52,9 @@ http://127.0.0.1:8767
 ---
 
 Fortnite와 랭크 아트워크는 Epic Games와 각 권리자에게 있습니다. 비공식 독립 프로젝트입니다.
+
+## Usage terms
+
+The application remains free to use, including in monetized streams and videos. Installation, local builds, backups and configuration needed for that use are permitted. Reusing newly covered code in another project, modifying it, redistributing the application or selling copies requires HanaCherry's prior written permission through this repository's issues.
+
+Previously granted rights are preserved: code already published under MIT remains under MIT, and third-party components keep their licenses. New covered original contributions follow the [free application use license](../../LICENSE). GitHub's viewing and forking rights are preserved.
